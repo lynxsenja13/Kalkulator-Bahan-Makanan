@@ -169,7 +169,7 @@
 
   <div class="card">
 
-    <button onclick="tambahBahan()">+ Tambah Bahan</button>
+    <button type="button" onclick="tambahBahan()">+ Tambah Bahan</button>
 
     <div class="table-header">
       <div>Nama</div>
@@ -200,22 +200,37 @@
   function tambahBahan() {
     const container = document.getElementById("listBahan");
 
+    if (!container) {
+      alert("Container tidak ditemukan!");
+      return;
+    }
+
     const row = document.createElement("div");
     row.className = "bahan-row";
 
     row.innerHTML = `
       <input type="text" placeholder="Nama">
-      <input type="number" placeholder="Gram" oninput="hitungRow(this)">
-      <input type="number" placeholder="Porsi" oninput="hitungRow(this)">
+      <input type="number" placeholder="Gram">
+      <input type="number" placeholder="Porsi">
       <input type="text" placeholder="Total" readonly>
-      <button class="hapus-btn" onclick="hapusRow(this)">X</button>
+      <button type="button" class="hapus-btn">X</button>
     `;
+
+    // tombol hapus
+    row.querySelector(".hapus-btn").onclick = function () {
+      row.remove();
+      hitungTotalSemua();
+    };
+
+    // event hitung otomatis
+    const inputs = row.querySelectorAll("input");
+    inputs[1].oninput = () => hitungRow(row);
+    inputs[2].oninput = () => hitungRow(row);
 
     container.appendChild(row);
   }
 
-  function hitungRow(el) {
-    const row = el.parentElement;
+  function hitungRow(row) {
     const inputs = row.querySelectorAll("input");
 
     let gram = parseFloat(inputs[1].value) || 0;
@@ -224,11 +239,6 @@
     let total = (gram * porsi) / 1000;
     inputs[3].value = total.toFixed(2);
 
-    hitungTotalSemua();
-  }
-
-  function hapusRow(btn) {
-    btn.parentElement.remove();
     hitungTotalSemua();
   }
 
