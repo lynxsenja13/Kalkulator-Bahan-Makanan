@@ -1,174 +1,217 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Kalkulator Kebutuhan Bahan</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Kalkulator Kebutuhan Bahan PRO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f4f6f9;
-      margin: 0;
-      padding: 20px;
-    }
+<style>
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #4CAF50, #2196F3);
+  margin: 0;
+  padding: 20px;
+  color: #333;
+}
 
-    h1 {
-      text-align: center;
-      color: #333;
-    }
+.container {
+  max-width: 1000px;
+  margin: auto;
+  background: #fff;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
 
-    .container {
-      max-width: 900px;
-      margin: auto;
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
+h1 {
+  text-align: center;
+  margin-bottom: 10px;
+}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
+.sub {
+  text-align: center;
+  color: #777;
+  margin-bottom: 20px;
+}
 
-    th, td {
-      padding: 10px;
-      text-align: center;
-    }
+button {
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
 
-    th {
-      background: #4CAF50;
-      color: white;
-    }
+button:hover {
+  transform: scale(1.05);
+}
 
-    input {
-      width: 100%;
-      padding: 6px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
+.add-btn { background: #2196F3; color: white; }
+.delete-btn { background: #f44336; color: white; }
+.generate-btn { background: #4CAF50; color: white; width: 100%; margin-top: 10px; }
+.copy-btn { background: #673AB7; color: white; width: 100%; margin-top: 10px; }
+.export-btn { background: #FF9800; color: white; width: 100%; margin-top: 10px; }
 
-    button {
-      padding: 10px 15px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      margin: 5px;
-    }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
 
-    .add-btn {
-      background: #2196F3;
-      color: white;
-    }
+th {
+  background: #4CAF50;
+  color: white;
+  padding: 10px;
+}
 
-    .delete-btn {
-      background: #f44336;
-      color: white;
-    }
+td {
+  padding: 8px;
+}
 
-    .result-btn {
-      background: #4CAF50;
-      color: white;
-      width: 100%;
-      margin-top: 15px;
-    }
+input {
+  width: 100%;
+  padding: 6px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
 
-    textarea {
-      width: 100%;
-      margin-top: 15px;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      min-height: 120px;
-    }
+.total-cell {
+  font-weight: bold;
+}
 
-    .total {
-      font-weight: bold;
-      color: #333;
-    }
-  </style>
+.total-summary {
+  margin-top: 15px;
+  font-weight: bold;
+  text-align: right;
+}
+
+textarea {
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 8px;
+  min-height: 120px;
+}
+
+.badge {
+  background: #ffeb3b;
+  padding: 3px 6px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+</style>
 </head>
 
 <body>
 
 <div class="container">
   <h1>🍱 Kalkulator Kebutuhan Bahan</h1>
+  <div class="sub">Versi Profesional • Multi Bahan • Auto Hitung</div>
 
   <button class="add-btn" onclick="addRow()">+ Tambah Bahan</button>
 
-  <table id="table">
+  <table>
     <thead>
       <tr>
-        <th>Nama Bahan</th>
-        <th>Gram / Porsi</th>
-        <th>Jumlah Porsi</th>
+        <th>Nama</th>
+        <th>Gram/Porsi</th>
+        <th>Porsi</th>
         <th>Total (Kg)</th>
         <th>Aksi</th>
       </tr>
     </thead>
-    <tbody id="tbody">
-    </tbody>
+    <tbody id="tbody"></tbody>
   </table>
 
-  <button class="result-btn" onclick="generateReport()">📄 Generate Laporan</button>
+  <div class="total-summary" id="grandTotal">Total Semua: 0 Kg</div>
 
-  <textarea id="output" placeholder="Hasil laporan akan muncul di sini..."></textarea>
+  <button class="generate-btn" onclick="generateReport()">📄 Generate Laporan</button>
+  <button class="copy-btn" onclick="copyText()">📋 Copy</button>
+  <button class="export-btn" onclick="exportTxt()">📤 Export TXT</button>
+
+  <textarea id="output" placeholder="Hasil laporan muncul di sini..."></textarea>
 </div>
 
 <script>
 function addRow() {
-  const tbody = document.getElementById("tbody");
-
   const row = document.createElement("tr");
 
   row.innerHTML = `
-    <td><input type="text" placeholder="Contoh: Wortel"></td>
+    <td><input type="text" placeholder="Contoh: Beras / Wortel" oninput="calculate(this)"></td>
     <td><input type="number" oninput="calculate(this)"></td>
     <td><input type="number" oninput="calculate(this)"></td>
-    <td class="total">0</td>
-    <td><button class="delete-btn" onclick="deleteRow(this)">Hapus</button></td>
+    <td class="total-cell">0</td>
+    <td><button class="delete-btn" onclick="deleteRow(this)">X</button></td>
   `;
 
-  tbody.appendChild(row);
+  document.getElementById("tbody").appendChild(row);
 }
 
 function deleteRow(btn) {
   btn.parentElement.parentElement.remove();
+  updateGrandTotal();
 }
 
 function calculate(el) {
-  const row = el.parentElement.parentElement;
+  const row = el.closest("tr");
+
   const nama = row.children[0].children[0].value.toLowerCase();
   const gram = parseFloat(row.children[1].children[0].value) || 0;
   const porsi = parseFloat(row.children[2].children[0].value) || 0;
 
-  let totalGram = gram * porsi;
-  let totalKg = totalGram / 1000;
+  let totalKg = (gram * porsi) / 1000;
 
-  // KHUSUS BERAS
   if (nama.includes("beras")) {
-    totalKg = totalKg / 3; // konversi matang ke mentah
+    totalKg = totalKg / 3;
+    row.children[0].innerHTML = row.children[0].innerHTML.replace("badge","") + ' <span class="badge">konversi</span>';
   }
 
   row.children[3].innerText = totalKg.toFixed(2);
+
+  updateGrandTotal();
+}
+
+function updateGrandTotal() {
+  let total = 0;
+  document.querySelectorAll(".total-cell").forEach(cell => {
+    total += parseFloat(cell.innerText) || 0;
+  });
+
+  document.getElementById("grandTotal").innerText = "Total Semua: " + total.toFixed(2) + " Kg";
 }
 
 function generateReport() {
   const rows = document.querySelectorAll("#tbody tr");
-  let text = "📋 Laporan Kebutuhan Bahan:\n\n";
+
+  let text = "📋 LAPORAN KEBUTUHAN BAHAN\n\n";
 
   rows.forEach((row, i) => {
-    const nama = row.children[0].children[0].value;
+    const nama = row.children[0].innerText;
     const total = row.children[3].innerText;
 
-    if (nama) {
+    if (nama.trim() !== "") {
       text += `${i+1}. ${nama} = ${total} kg\n`;
     }
   });
 
   document.getElementById("output").value = text;
+}
+
+function copyText() {
+  const textarea = document.getElementById("output");
+  textarea.select();
+  document.execCommand("copy");
+  alert("✅ Laporan berhasil dicopy!");
+}
+
+function exportTxt() {
+  const text = document.getElementById("output").value;
+  const blob = new Blob([text], { type: "text/plain" });
+  const link = document.createElement("a");
+
+  link.href = URL.createObjectURL(blob);
+  link.download = "laporan_bahan.txt";
+  link.click();
 }
 </script>
 
