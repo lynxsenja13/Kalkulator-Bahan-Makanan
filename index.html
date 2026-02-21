@@ -91,18 +91,19 @@
       color: white;
       font-weight: bold;
       cursor: pointer;
-    }
+      transition: 0.3s;
+  }
 
-    /* DARK MODE BUTTON KHUSUS */
+  /* DARK MODE */
     body.dark button {
-      background: #ffffff;
-      color: #0f172a;
-    }
+    background: #ffffff;
+    color: #0f172a;
+  }
 
     /* HEADER TABLE */
     .table-header {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: 2fr 1fr 1fr 1fr 0.7fr;
       background: linear-gradient(145deg, #3b82f6, #2563eb);
       color: white;
       padding: 12px;
@@ -115,7 +116,7 @@
     /* ROW BAHAN */
     .bahan-row {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: 2fr 1fr 1fr 1fr 0.7fr;
       gap: 5px;
       margin-top: 10px;
     }
@@ -184,7 +185,7 @@
 
     <div class="total" id="totalSemua">Total Semua: 0 Kg</div>
 
-    <button class="btn-green">Generate Laporan</button>
+    <button class="btn-green" onclick="generateLaporan()">Generate Laporan</button>
 
     <textarea placeholder="Hasil laporan akan muncul di sini..."></textarea>
 
@@ -231,16 +232,24 @@
   }
 
   function hitungRow(row) {
-    const inputs = row.querySelectorAll("input");
+  const inputs = row.querySelectorAll("input");
 
-    let gram = parseFloat(inputs[1].value) || 0;
-    let porsi = parseFloat(inputs[2].value) || 0;
+  let nama = inputs[0].value.toLowerCase();
+  let gram = parseFloat(inputs[1].value) || 0;
+  let porsi = parseFloat(inputs[2].value) || 0;
 
-    let total = (gram * porsi) / 1000;
-    inputs[3].value = total.toFixed(2);
+  let total;
 
-    hitungTotalSemua();
+  if (nama.includes("beras")) {
+    total = (gram * porsi) / 1000 / 3;
+  } else {
+    total = (gram * porsi) / 1000;
   }
+
+  inputs[3].value = total.toFixed(2);
+
+  hitungTotalSemua();
+}
 
   function hitungTotalSemua() {
     const rows = document.querySelectorAll(".bahan-row");
@@ -254,6 +263,26 @@
     document.getElementById("totalSemua").innerText =
       "Total Semua: " + total.toFixed(2) + " Kg";
   }
+
+  function generateLaporan() {
+  const rows = document.querySelectorAll(".bahan-row");
+  let hasil = "";
+
+  rows.forEach((row, index) => {
+    const inputs = row.querySelectorAll("input");
+
+    let nama = inputs[0].value;
+    let gram = inputs[1].value;
+    let porsi = inputs[2].value;
+    let total = inputs[3].value;
+
+    if (nama) {
+      hasil += `${index + 1}. ${nama} - ${total} Kg\n`;
+    }
+  });
+
+  document.querySelector("textarea").value = hasil;
+}
 </script>
 
 </body>
