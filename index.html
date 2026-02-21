@@ -10,18 +10,16 @@
 
   <style>
     :root {
-      --bg: #f1f5f9;
-      --card: #0f172a;
-      --text: #ffffff;
-      --accent: #3b82f6;
-    }
+      --bg: #f1f5f9;      /* background terang */
+      --card: #0f172a;    /* card gelap */
+      --text: #0f172a;    /* TEXT GELAP (untuk light mode) */
+  }
 
-    /* DARK MODE (dibalik sesuai request) */
-    body.dark {
-      --bg: #020617;
-      --card: #f8fafc;
-      --text: #0f172a;
-    }
+  body.dark {
+      --bg: #020617;      /* background gelap */
+      --card: #f8fafc;    /* card terang */
+      --text: #ffffff;    /* TEXT TERANG (untuk dark mode) */
+  }
 
     body {
       margin: 0;
