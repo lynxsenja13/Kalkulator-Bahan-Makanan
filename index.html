@@ -111,27 +111,26 @@
       font-weight: bold;
       text-align: center;
       margin-top: 15px;
+      gap: 0;
     }
 
     /* ROW BAHAN */
     .bahan-row {
       display: grid;
       grid-template-columns: 2fr 1fr 1fr 1fr 0.7fr;
-      gap: 5px;
+      gap: 0;
       margin-top: 10px;
     }
 
     .bahan-row input {
-      padding: 8px;
-      border-radius: 8px;
+      padding: 12px;
+      border-radius: 0;
       border: none;
     }
 
     .hapus-btn {
-      background: #ef4444;
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
+      height: 100%;
+      border-radius: 0;
     }
 
     .total {
@@ -152,7 +151,27 @@
       background: #22c55e;
       margin-top: 10px;
     }
+    
+    .table-header div,
+    .bahan-row input,
+    .bahan-row button {
+      border-right: 1px solid rgba(255,255,255,0.2);
+    }
 
+    .table-header div:last-child,
+    .bahan-row button {
+      border-right: none;
+    }
+
+    /* TOTAL SEMUA */
+    .total {
+      color: #ffffff; /* default = light mode (cerah) */
+  }
+
+  /* DARK MODE → jadi gelap */
+    body.dark .total {
+      color: #0f172a;
+  }
   </style>
 </head>
 <body>
@@ -282,7 +301,8 @@
   });
 
   document.querySelector("textarea").value = hasil;
-}
+  }
+  
 </script>
 
 </body>
