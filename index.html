@@ -1,258 +1,201 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kalkulator Kebutuhan Bahan</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator Bahan Makanan</title>
 
-<style>
-:root {
-  --bg: #f4f7fb;
-  --card: #ffffff;
-  --text: #1e293b;
-  --primary: #3b82f6;
-  --danger: #ef4444;
-}
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --card: #0f172a;
+      --text: #ffffff;
+      --accent: #3b82f6;
+    }
 
-body.dark {
-  --bg: #0f172a;
-  --card: #1e293b;
-  --text: #f1f5f9;
-}
+    body.dark {
+      --bg: #020617;
+      --card: #1e293b;
+      --text: #ffffff;
+    }
 
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  transition: 0.3s;
-}
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      transition: 0.3s;
+    }
 
-/* HEADER */
-.header {
-  text-align: center;
-  padding: 30px 20px 10px;
-}
+    .container {
+      max-width: 500px;
+      margin: auto;
+      padding: 20px;
+    }
 
-.header img {
-  width: 130px;
-}
+    .logo {
+      display: block;
+      margin: 0 auto 20px;
+      width: 80px;
+    }
 
-.title {
-  font-size: 28px;
-  font-weight: bold;
-}
+    .card {
+      background: linear-gradient(145deg, #0f172a, #1e293b);
+      color: var(--text);
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
 
-.subtitle {
-  font-size: 18px;
-  font-weight: bold;
-  margin-top: 5px;
-}
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
-/* CARD */
-.card {
-  max-width: 950px;
-  margin: auto;
-  background: var(--card);
-  padding: 25px;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-}
+    label {
+      font-size: 14px;
+    }
 
-/* BUTTON */
-button {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  margin: 5px;
-  font-weight: bold;
-}
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      outline: none;
+    }
 
-.add { background: var(--primary); color: white; }
-.delete { background: var(--danger); color: white; }
-.generate { background: #22c55e; color: white; }
-.toggle { background: #64748b; color: white; float:right; }
+    button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
 
-/* TABLE */
-table {
-  width: 100%;
-  margin-top: 15px;
-  border-collapse: collapse;
-}
+    button:hover {
+      opacity: 0.9;
+    }
 
-th {
-  background: var(--primary);
-  color: white;
-}
+    .toggle {
+      text-align: right;
+      margin-bottom: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--accent);
+    }
 
-th, td {
-  padding: 10px;
-  text-align: center;
-}
+    .result {
+      margin-top: 20px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
 
-input {
-  width: 90%;
-  padding: 6px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
+    .error {
+      color: #f87171;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
 
-.error {
-  border: 2px solid red;
-}
+    .ahli {
+      margin-top: 20px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 16px;
+    }
 
-/* RESULT */
-textarea {
-  width: 100%;
-  height: 120px;
-  margin-top: 10px;
-  padding: 10px;
-  border-radius: 10px;
-}
-
-/* ALERT */
-.alert {
-  color: red;
-  font-size: 13px;
-  display: none;
-}
-</style>
+  </style>
 </head>
-
 <body>
 
-<div class="header">
-  <button class="toggle" onclick="toggleMode()">🌙 Mode</button>
-  <img src="logo.png">
-  <div class="title">SPPG Cicadas 01</div>
-  <div class="subtitle"><b>Ahli Gizi : Aliyah Khairunnisa Syafitri</b></div>
-</div>
+<div class="container">
 
-<div class="card">
+  <!-- LOGO -->
+  <img src="logo.png" class="logo" alt="logo">
 
-  <button class="add" onclick="addRow()">+ Tambah Bahan</button>
+  <div class="toggle" onclick="toggleMode()">🌙 / ☀️ Mode</div>
 
-  <table id="table">
-    <tr>
-      <th>Nama</th>
-      <th>Gram/Porsi</th>
-      <th>Porsi</th>
-      <th>Total (Kg)</th>
-      <th>Aksi</th>
-    </tr>
-  </table>
+  <div class="card">
+    <h2>Kalkulator Bahan</h2>
 
-  <div class="alert" id="alert">⚠️ Pastikan semua input terisi dengan benar!</div>
+    <div id="error" class="error"></div>
 
-  <h3 id="totalSemua">Total Semua: 0 Kg</h3>
+    <label>Jumlah Balita</label>
+    <input type="number" id="balita">
 
-  <button class="generate" onclick="generate()">Generate Laporan</button>
+    <label>Jumlah Bumil & Busui</label>
+    <input type="number" id="bumil">
 
-  <textarea id="output"></textarea>
+    <label>Jumlah SD</label>
+    <input type="number" id="sd">
+
+    <label>Jumlah SMP</label>
+    <input type="number" id="smp">
+
+    <label>Jumlah SMA</label>
+    <input type="number" id="sma">
+
+    <button onclick="hitung()">Hitung</button>
+
+    <div class="result" id="hasil"></div>
+
+    <div class="ahli">
+      Ahli Gizi : Aliyah Khairunnisa Syafitri
+    </div>
+
+  </div>
 </div>
 
 <script>
-function addRow() {
-  let table = document.getElementById("table");
-  let row = table.insertRow();
-
-  row.innerHTML = `
-    <td><input oninput="hitung(this)"></td>
-    <td><input type="number" oninput="hitung(this)"></td>
-    <td><input type="number" oninput="hitung(this)"></td>
-    <td class="hasil">0</td>
-    <td><button class="delete" onclick="hapus(this)">X</button></td>
-  `;
-}
-
-function hapus(btn) {
-  btn.parentElement.parentElement.remove();
-  updateTotal();
-}
-
-function hitung(el) {
-  let row = el.parentElement.parentElement;
-
-  let namaInput = row.cells[0].children[0];
-  let gramInput = row.cells[1].children[0];
-  let porsiInput = row.cells[2].children[0];
-
-  let nama = namaInput.value.trim().toLowerCase();
-  let gram = parseFloat(gramInput.value);
-  let porsi = parseFloat(porsiInput.value);
-
-  // reset error
-  [namaInput, gramInput, porsiInput].forEach(i => i.classList.remove("error"));
-
-  let valid = true;
-
-  if (!nama) {
-    namaInput.classList.add("error");
-    valid = false;
+  function toggleMode() {
+    document.body.classList.toggle("dark");
   }
 
-  if (!gram || gram <= 0) {
-    gramInput.classList.add("error");
-    valid = false;
+  function hitung() {
+    let balita = parseInt(document.getElementById("balita").value) || 0;
+    let bumil = parseInt(document.getElementById("bumil").value) || 0;
+    let sd = parseInt(document.getElementById("sd").value) || 0;
+    let smp = parseInt(document.getElementById("smp").value) || 0;
+    let sma = parseInt(document.getElementById("sma").value) || 0;
+
+    let error = document.getElementById("error");
+    let hasil = document.getElementById("hasil");
+
+    // VALIDASI
+    if (balita < 0 || bumil < 0 || sd < 0 || smp < 0 || sma < 0) {
+      error.innerHTML = "Input tidak boleh negatif!";
+      hasil.innerHTML = "";
+      return;
+    }
+
+    error.innerHTML = "";
+
+    // NILAI GIZI (contoh)
+    let giziBalita = balita * 300;
+    let giziBumil = bumil * 500; // sama dengan SMA
+    let giziSD = sd * 400;
+    let giziSMP = smp * 450;
+    let giziSMA = sma * 500;
+
+    let html = "";
+
+    // RULE: jika balita 0 → tidak tampil gizi sama sekali
+    if (balita > 0) {
+      html += `<b>Gizi Balita:</b> ${giziBalita} kkal<br>`;
+      html += `<b>Gizi Bumil & Busui:</b> ${giziBumil} kkal<br>`;
+      html += `<b>Gizi SD:</b> ${giziSD} kkal<br>`;
+      html += `<b>Gizi SMP:</b> ${giziSMP} kkal<br>`;
+      html += `<b>Gizi SMA:</b> ${giziSMA} kkal<br>`;
+    } else {
+      html += `<i>Balita libur → data gizi tidak ditampilkan</i>`;
+    }
+
+    hasil.innerHTML = html;
   }
-
-  if (!porsi || porsi <= 0) {
-    porsiInput.classList.add("error");
-    valid = false;
-  }
-
-  if (!valid) {
-    document.getElementById("alert").style.display = "block";
-    return;
-  } else {
-    document.getElementById("alert").style.display = "none";
-  }
-
-  let totalGram = gram * porsi;
-
-  if (nama.includes("beras")) {
-    totalGram = totalGram / 3;
-  }
-
-  let kg = totalGram / 1000;
-  row.cells[3].innerText = kg.toFixed(2);
-
-  updateTotal();
-}
-
-function updateTotal() {
-  let rows = document.querySelectorAll("#table tr");
-  let total = 0;
-
-  rows.forEach((row, i) => {
-    if (i === 0) return;
-    total += parseFloat(row.cells[3].innerText) || 0;
-  });
-
-  document.getElementById("totalSemua").innerText =
-    "Total Semua: " + total.toFixed(2) + " Kg";
-}
-
-function generate() {
-  let rows = document.querySelectorAll("#table tr");
-  let text = "LAPORAN KEBUTUHAN BAHAN\n\n";
-
-  rows.forEach((row, i) => {
-    if (i === 0) return;
-
-    let nama = row.cells[0].children[0].value;
-    let kg = row.cells[3].innerText;
-
-    if (nama) text += "- " + nama + " : " + kg + " Kg\n";
-  });
-
-  document.getElementById("output").value = text;
-}
-
-function toggleMode() {
-  document.body.classList.toggle("dark");
-}
 </script>
 
 </body>
