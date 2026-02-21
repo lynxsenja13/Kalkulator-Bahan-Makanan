@@ -106,12 +106,12 @@
       grid-template-columns: 2fr 1fr 1fr 1fr 60px;
       background: linear-gradient(145deg, #3b82f6, #2563eb);
       color: white;
-      padding: 12px;
+      padding: 12px 10px;
       border-radius: 15px;
       font-weight: bold;
       text-align: center;
       margin-top: 15px;
-      gap: 0;
+      gap: 5px;
     }
 
     /* ROW BAHAN */
@@ -127,9 +127,17 @@
       overflow: hidden;
     }
 
+    .table-header div {
+      text-align: center;
+    }
+
+    .bahan-row input[type="text"] {
+      text-align: left;
+    }
+
     .bahan-row input {
-      width: 100%;
-      box-sizing: border-box;
+      padding: 0 10px;
+      height: 40px;
     }
 
     .hapus-btn {
@@ -149,6 +157,15 @@
       border-radius: 12px;
       padding: 10px;
       border: 1px solid #ccc;
+    }
+
+    .table-header div,
+    .bahan-row input,
+    .bahan-row button {
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .btn-green {
