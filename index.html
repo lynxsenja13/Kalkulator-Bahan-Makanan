@@ -10,16 +10,18 @@
 
   <style>
     :root {
-      --bg: #f1f5f9;      /* background terang */
-      --card: #0f172a;    /* card gelap */
-      --text: #0f172a;    /* TEXT GELAP (untuk light mode) */
-  }
+      --bg: #f1f5f9;
+      --card: #0f172a;
+      --text: #0f172a;
+      --accent: #3b82f6;
+    }
 
-  body.dark {
-      --bg: #020617;      /* background gelap */
-      --card: #f8fafc;    /* card terang */
-      --text: #ffffff;    /* TEXT TERANG (untuk dark mode) */
-  }
+    /* DARK MODE */
+    body.dark {
+      --bg: #020617;
+      --card: #f8fafc;
+      --text: #ffffff;
+    }
 
     body {
       margin: 0;
@@ -35,7 +37,6 @@
       position: relative;
     }
 
-    /* LOGO CENTER */
     .logo-wrapper {
       display: flex;
       justify-content: center;
@@ -53,7 +54,6 @@
       color: var(--text);
     }
 
-    /* AHLI GIZI (font lucu) */
     .ahli {
       text-align: center;
       font-weight: 700;
@@ -63,7 +63,6 @@
       color: var(--text);
     }
 
-    /* TOGGLE MODE */
     .toggle {
       position: absolute;
       top: 20px;
@@ -94,7 +93,13 @@
       cursor: pointer;
     }
 
-    /* HEADER TABLE (ROUNDED) */
+    /* DARK MODE BUTTON KHUSUS */
+    body.dark button {
+      background: #ffffff;
+      color: #0f172a;
+    }
+
+    /* HEADER TABLE */
     .table-header {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -105,6 +110,27 @@
       font-weight: bold;
       text-align: center;
       margin-top: 15px;
+    }
+
+    /* ROW BAHAN */
+    .bahan-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 5px;
+      margin-top: 10px;
+    }
+
+    .bahan-row input {
+      padding: 8px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    .hapus-btn {
+      background: #ef4444;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
     }
 
     .total {
@@ -132,10 +158,8 @@
 
 <div class="container">
 
-  <!-- TOGGLE -->
   <div class="toggle" onclick="toggleMode()">🌙 Mode</div>
 
-  <!-- LOGO -->
   <div class="logo-wrapper">
     <img src="logo.png" class="logo">
   </div>
@@ -145,9 +169,8 @@
 
   <div class="card">
 
-    <button>+ Tambah Bahan</button>
+    <button onclick="tambahBahan()">+ Tambah Bahan</button>
 
-    <!-- HEADER -->
     <div class="table-header">
       <div>Nama</div>
       <div>Gram/Porsi</div>
@@ -156,7 +179,10 @@
       <div>Aksi</div>
     </div>
 
-    <div class="total">Total Semua: 0 Kg</div>
+    <!-- LIST BAHAN -->
+    <div id="listBahan"></div>
+
+    <div class="total" id="totalSemua">Total Semua: 0 Kg</div>
 
     <button class="btn-green">Generate Laporan</button>
 
@@ -169,6 +195,54 @@
 <script>
   function toggleMode() {
     document.body.classList.toggle("dark");
+  }
+
+  function tambahBahan() {
+    const container = document.getElementById("listBahan");
+
+    const row = document.createElement("div");
+    row.className = "bahan-row";
+
+    row.innerHTML = `
+      <input type="text" placeholder="Nama">
+      <input type="number" placeholder="Gram" oninput="hitungRow(this)">
+      <input type="number" placeholder="Porsi" oninput="hitungRow(this)">
+      <input type="text" placeholder="Total" readonly>
+      <button class="hapus-btn" onclick="hapusRow(this)">X</button>
+    `;
+
+    container.appendChild(row);
+  }
+
+  function hitungRow(el) {
+    const row = el.parentElement;
+    const inputs = row.querySelectorAll("input");
+
+    let gram = parseFloat(inputs[1].value) || 0;
+    let porsi = parseFloat(inputs[2].value) || 0;
+
+    let total = (gram * porsi) / 1000;
+    inputs[3].value = total.toFixed(2);
+
+    hitungTotalSemua();
+  }
+
+  function hapusRow(btn) {
+    btn.parentElement.remove();
+    hitungTotalSemua();
+  }
+
+  function hitungTotalSemua() {
+    const rows = document.querySelectorAll(".bahan-row");
+    let total = 0;
+
+    rows.forEach(row => {
+      const val = parseFloat(row.children[3].value) || 0;
+      total += val;
+    });
+
+    document.getElementById("totalSemua").innerText =
+      "Total Semua: " + total.toFixed(2) + " Kg";
   }
 </script>
 
