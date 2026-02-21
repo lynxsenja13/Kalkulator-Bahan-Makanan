@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Kalkulator Kebutuhan Bahan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background: #4CAF50;
+      color: white;
+    }
+
+    input {
+      width: 100%;
+      padding: 6px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 5px;
+    }
+
+    .add-btn {
+      background: #2196F3;
+      color: white;
+    }
+
+    .delete-btn {
+      background: #f44336;
+      color: white;
+    }
+
+    .result-btn {
+      background: #4CAF50;
+      color: white;
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    textarea {
+      width: 100%;
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      min-height: 120px;
+    }
+
+    .total {
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>🍱 Kalkulator Kebutuhan Bahan</h1>
+
+  <button class="add-btn" onclick="addRow()">+ Tambah Bahan</button>
+
+  <table id="table">
+    <thead>
+      <tr>
+        <th>Nama Bahan</th>
+        <th>Gram / Porsi</th>
+        <th>Jumlah Porsi</th>
+        <th>Total (Kg)</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody id="tbody">
+    </tbody>
+  </table>
+
+  <button class="result-btn" onclick="generateReport()">📄 Generate Laporan</button>
+
+  <textarea id="output" placeholder="Hasil laporan akan muncul di sini..."></textarea>
+</div>
+
+<script>
+function addRow() {
+  const tbody = document.getElementById("tbody");
+
+  const row = document.createElement("tr");
+
+  row.innerHTML = `
+    <td><input type="text" placeholder="Contoh: Wortel"></td>
+    <td><input type="number" oninput="calculate(this)"></td>
+    <td><input type="number" oninput="calculate(this)"></td>
+    <td class="total">0</td>
+    <td><button class="delete-btn" onclick="deleteRow(this)">Hapus</button></td>
+  `;
+
+  tbody.appendChild(row);
+}
+
+function deleteRow(btn) {
+  btn.parentElement.parentElement.remove();
+}
+
+function calculate(el) {
+  const row = el.parentElement.parentElement;
+  const nama = row.children[0].children[0].value.toLowerCase();
+  const gram = parseFloat(row.children[1].children[0].value) || 0;
+  const porsi = parseFloat(row.children[2].children[0].value) || 0;
+
+  let totalGram = gram * porsi;
+  let totalKg = totalGram / 1000;
+
+  // KHUSUS BERAS
+  if (nama.includes("beras")) {
+    totalKg = totalKg / 3; // konversi matang ke mentah
+  }
+
+  row.children[3].innerText = totalKg.toFixed(2);
+}
+
+function generateReport() {
+  const rows = document.querySelectorAll("#tbody tr");
+  let text = "📋 Laporan Kebutuhan Bahan:\n\n";
+
+  rows.forEach((row, i) => {
+    const nama = row.children[0].children[0].value;
+    const total = row.children[3].innerText;
+
+    if (nama) {
+      text += `${i+1}. ${nama} = ${total} kg\n`;
+    }
+  });
+
+  document.getElementById("output").value = text;
+}
+</script>
+
+</body>
+</html>
