@@ -288,9 +288,11 @@
 function pembulatanKhusus(angka) {
   if (isNaN(angka)) return 0;
 
-  let desimal = angka - Math.floor(angka);
+  // Ambil 2 angka belakang koma sebagai integer
+  let duaDesimal = Math.round(angka * 100);
 
-  if (desimal >= 0.99) {
+  // Cek apakah 2 digit terakhir adalah 99
+  if (duaDesimal % 100 === 99) {
     return Math.ceil(angka);
   }
 
