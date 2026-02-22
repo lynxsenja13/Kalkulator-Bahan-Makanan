@@ -298,6 +298,9 @@ function hitungRow(row) {
   let mentahPerPorsi = matang * faktor;
   let totalKg = (mentahPerPorsi * porsi) / 1000;
 
+  mentahPerPorsi = pembulatanKhusus(mentahPerPorsi);
+  totalKg = pembulatanKhusus(totalKg);
+
   inputs[4].value = mentahPerPorsi.toFixed(2);
   inputs[5].value = totalKg.toFixed(2);
 
@@ -319,6 +322,16 @@ function hitungTotalSemua() {
 
   document.getElementById("totalSemua").innerText =
     "Total Semua: " + total.toFixed(2) + " Kg";
+}
+
+function pembulatanKhusus(angka) {
+  let desimal = angka - Math.floor(angka);
+
+  if (desimal >= 0.99) {
+    return Math.ceil(angka);
+  } else {
+    return angka;
+  }
 }
 
 // ===============================
