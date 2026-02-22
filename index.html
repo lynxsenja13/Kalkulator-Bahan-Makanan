@@ -190,7 +190,6 @@
     }
 
     .btn-green {
-      background: #22c55e;
       margin-top: 10px;
     }
     
@@ -213,6 +212,33 @@
     body.dark .total {
       color: #0f172a;
   }
+
+    /* ===============================
+   FORCE BUTTON COLORS (FINAL FIX)
+   =============================== */
+
+/* tombol tambah bahan (biru konsisten) */
+button:not(.hapus-btn):not(.btn-green) {
+  background: var(--accent) !important;
+  color: white !important;
+}
+
+/* tombol generate (hijau konsisten) */
+.btn-green {
+  background: #22c55e !important;
+  color: white !important;
+}
+
+/* tombol hapus selalu merah */
+.hapus-btn {
+  background: #ef4444 !important;
+  color: white !important;
+}
+
+.hapus-btn:hover {
+  background: #dc2626 !important;
+}
+    
   </style>
 </head>
 <body>
