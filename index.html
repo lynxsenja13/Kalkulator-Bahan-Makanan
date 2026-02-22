@@ -123,6 +123,8 @@
       grid-template-columns: 2fr 1fr 1fr 1fr 60px;
       align-items: center;
       margin-top: 10px;
+      overflow: hidden;
+      border-radius: 12px;
     }
 
     .card {
@@ -142,12 +144,30 @@
       padding: 0 10px;
       height: 40px;
       border: 1px solid #cbd5e1;
-      border-radius: 8px;
-  }
+      border-radius: 0;              /* 🔥 hilangkan rounded tengah */
+      background: #ffffff;
+    }
 
-.bahan-row button {
-  width: 100%;
-}
+    .bahan-row button {
+      width: 100%;
+    }
+
+    /* sudut kiri pertama */
+    .bahan-row input:first-child {
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+    }
+
+    /* sudut kanan sebelum tombol */
+    .bahan-row input:nth-child(4) {
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+
+    /* hilangkan double border di tengah */
+    .bahan-row input:not(:first-child) {
+      border-left: none;
+    }
 
     .hapus-btn {
       width: 100%;
@@ -159,6 +179,8 @@
       cursor: pointer;
       transition: 0.2s;
       box-shadow: 0 4px 10px rgba(239,68,68,0.35);
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
   }
 
     /* efek hover biar mantap */
