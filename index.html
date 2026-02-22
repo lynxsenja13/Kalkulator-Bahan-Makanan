@@ -194,6 +194,10 @@ async function loadDatabase() {
 
   if (nama && faktor) {
     database[nama] = faktor;
+
+    const option = document.createElement("option");
+    option.value = nama;
+    document.getElementById("bahanList").appendChild(option);
   }
 });
 
@@ -214,42 +218,32 @@ function tambahBahan() {
   const row = document.createElement("div");
   row.className = "bahan-row";
 
-  // 1️⃣ Buat struktur row dulu
+  // 1️⃣ Struktur row
   row.innerHTML = `
-    <select></select>
+    <input list="bahanList" placeholder="Nama">
     <input type="number" placeholder="Matang">
     <input type="number" placeholder="Porsi">
-    <input type="text" placeholder="Faktor" readonly>
+    <input type="number" placeholder="Faktor">
     <input type="text" placeholder="Mentah/Porsi" readonly>
     <input type="text" placeholder="Total" readonly>
     <button class="hapus-btn">X</button>
   `;
 
-  // 2️⃣ 🔥 DI SINI TAMBAHKAN KODE DROPDOWN
-  const select = row.querySelector("select");
-
-  Object.keys(database).forEach(nama => {
-    const option = document.createElement("option");
-    option.value = nama;
-    option.textContent = nama;
-    select.appendChild(option);
-  });
-
-  // 3️⃣ Event ketika pilih bahan
-  select.onchange = () => isiFaktor(row);
-
-  // 4️⃣ Ambil input lainnya
+  // 2️⃣ 🔥 TARUH KODE INI DI SINI
   const inputs = row.querySelectorAll("input");
 
-  inputs[0].oninput = () => hitungRow(row);
-  inputs[1].oninput = () => hitungRow(row);
+  inputs[0].oninput = () => isiFaktor(row);   // Nama
+  inputs[1].oninput = () => hitungRow(row);  // Matang
+  inputs[2].oninput = () => hitungRow(row);  // Porsi
+  inputs[3].oninput = () => hitungRow(row);  // Faktor manual
 
-  // 5️⃣ Tombol hapus
+  // 3️⃣ Tombol hapus
   row.querySelector(".hapus-btn").onclick = () => {
     row.remove();
     hitungTotalSemua();
   };
 
+  // 4️⃣ Masukkan ke container
   container.appendChild(row);
 }
 
@@ -257,15 +251,12 @@ function tambahBahan() {
 // 🔍 AMBIL FAKTOR
 // ===============================
 function isiFaktor(row) {
-  const select = row.querySelector("select");
   const inputs = row.querySelectorAll("input");
 
-  let nama = select.value;
+  let nama = inputs[0].value.toLowerCase().trim();
 
   if (database[nama] !== undefined) {
-    inputs[2].value = database[nama]; // kolom faktor
-  } else {
-    inputs[2].value = "";
+    inputs[3].value = database[nama];
   }
 
   hitungRow(row);
@@ -277,16 +268,15 @@ function isiFaktor(row) {
 function hitungRow(row) {
   const inputs = row.querySelectorAll("input");
 
-  let matang = parseFloat(inputs[0].value) || 0;
-  let porsi = parseFloat(inputs[1].value) || 0;
-  let faktor = parseFloat(inputs[2].value) || 0;
+  let matang = parseFloat(inputs[1].value) || 0;
+  let porsi = parseFloat(inputs[2].value) || 0;
+  let faktor = parseFloat(inputs[3].value) || 0;
 
-  // 🔥 RUMUS YANG BENAR
   let mentahPerPorsi = matang * faktor;
   let totalKg = (mentahPerPorsi * porsi) / 1000;
 
-  inputs[3].value = mentahPerPorsi.toFixed(2);
-  inputs[4].value = totalKg.toFixed(2);
+  inputs[4].value = mentahPerPorsi.toFixed(2);
+  inputs[5].value = totalKg.toFixed(2);
 
   hitungTotalSemua();
 }
