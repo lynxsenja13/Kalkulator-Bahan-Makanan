@@ -81,19 +81,40 @@
 .table-header, .bahan-row {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 80px;
-  gap: 5px;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 10px;
 }
 
 .bahan-row input {
-  min-width: 0;
-  width: 100%;
-  height: 40px;
-  border: 1px solid #ccc;
+  border: none;
+  border-right: 1px solid #eee;
+  height: 45px;
   text-align: center;
 }
 
+.bahan-row input:last-of-type {
+  border-right: none;
+}
+
 .bahan-row button {
-  height: 40px;
+  border: none;
+  height: 45px;
+}
+
+.bahan-row input:focus {
+  outline: none;
+  background: #f8fafc;
+}
+
+.table-header {
+  background: #3b82f6;
+  color: white;
+  padding: 10px 0;
+  border-radius: 12px;
+  font-weight: bold;
+  text-align: center;
 }
 
 .table-header div {
