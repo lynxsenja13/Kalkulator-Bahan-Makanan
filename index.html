@@ -59,14 +59,13 @@
       cursor: pointer;
     }
 
-    <datalist id="bahanList"></datalist>
-
     .card {
       background: var(--card);
       color: var(--text);
       border-radius: 20px;
       padding: 25px;
       margin-top: 20px;
+      overflow: hidden; /* 🔥 penting */
     }
 
     button {
@@ -86,6 +85,13 @@
       text-align: center;
       align-items: center;
       margin-top: 10px;
+      width: 100%;
+    }
+
+    .bahan-row {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
     }
 
     .table-header {
@@ -100,6 +106,15 @@
       height: 40px;
       border: 1px solid #ccc;
       text-align: center;
+      min-width: 0; /* 🔥 FIX GRID OVERFLOW */
+    }
+
+    .table-header div,
+    .bahan-row input,
+    .bahan-row button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .hapus-btn {
@@ -121,9 +136,11 @@
 
 <body>
 
-<div class="container">
+  <div class="container">
 
-  <div class="toggle" onclick="toggleMode()">🌙 Mode</div>
+    <datalist id="bahanList"></datalist>
+
+    <div class="toggle" onclick="toggleMode()">🌙 Mode</div>
 
   <h1>SPPG Cicadas 01</h1>
   <div class="ahli">Ahli Gizi : Aliyah Khairunnisa Syafitri</div>
@@ -179,6 +196,7 @@ async function loadDatabase() {
       // 🔥 isi dropdown
       const option = document.createElement("option");
       option.value = nama;
+      option.textContent = nama;
       datalist.appendChild(option);
     }
   });
@@ -209,6 +227,7 @@ function tambahBahan() {
 
   // 🔍 autocomplete + faktor
   inputs[0].oninput = () => isiFaktor(row);
+  inputs[0].onchange = () => isiFaktor(row); // 🔥 penting
 
   inputs[1].oninput = () => hitungRow(row);
   inputs[2].oninput = () => hitungRow(row);
@@ -229,11 +248,14 @@ function isiFaktor(row) {
 
   let nama = inputs[0].value.toLowerCase().trim();
 
-  if (database[nama]) {
-    inputs[3].value = database[nama];
-  } else {
-    inputs[3].value = "";
-  }
+// 🔥 cari yang mirip
+let key = Object.keys(database).find(k => k.includes(nama));
+
+if (key) {
+  inputs[3].value = database[key];
+} else {
+  inputs[3].value = "";
+}
 
   hitungRow(row);
 }
