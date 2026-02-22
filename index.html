@@ -59,6 +59,8 @@
       cursor: pointer;
     }
 
+    <datalist id="bahanList"></datalist>
+
     .card {
       background: var(--card);
       color: var(--text);
@@ -80,7 +82,7 @@
 
     .table-header, .bahan-row {
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr 1fr 60px;
+      grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 60px;
       text-align: center;
       align-items: center;
       margin-top: 10px;
@@ -131,12 +133,13 @@
     <button onclick="tambahBahan()">+ Tambah Bahan</button>
 
     <div class="table-header">
-      <div>Nama</div>
-      <div>Matang (gr)</div>
-      <div>Porsi</div>
-      <div>Faktor</div>
-      <div>Total (Kg)</div>
-      <div>Action</div>
+    <div>Nama</div>
+    <div>Matang (gr)</div>
+    <div>Porsi</div>
+    <div>Faktor</div>
+    <div>Mentah/Porsi</div>
+    <div>Total (Kg)</div>
+    <div>Action</div>
     </div>
 
     <div id="listBahan"></div>
@@ -154,7 +157,7 @@
 <script>
 
 // ===============================
-// 🔥 DATABASE DARI SPREADSHEET
+// 🔥 DATABASE
 // ===============================
 let database = {};
 
@@ -164,29 +167,27 @@ async function loadDatabase() {
   const res = await fetch(url);
   const data = await res.json();
 
+  const datalist = document.getElementById("bahanList");
+
   data.forEach(item => {
     let nama = item["Nama Bahan"]?.toLowerCase().trim();
     let faktor = parseFloat(item["Faktor Konversi"]);
 
     if (nama && faktor) {
       database[nama] = faktor;
+
+      // 🔥 isi dropdown
+      const option = document.createElement("option");
+      option.value = nama;
+      datalist.appendChild(option);
     }
   });
-
-  console.log("Database:", database);
 }
 
 loadDatabase();
 
 // ===============================
-// 🌙 DARK MODE
-// ===============================
-function toggleMode() {
-  document.body.classList.toggle("dark");
-}
-
-// ===============================
-// ➕ TAMBAH BAHAN
+// ➕ TAMBAH ROW
 // ===============================
 function tambahBahan() {
   const container = document.getElementById("listBahan");
@@ -195,17 +196,18 @@ function tambahBahan() {
   row.className = "bahan-row";
 
   row.innerHTML = `
-    <input type="text" placeholder="Nama">
+    <input list="bahanList" placeholder="Nama">
     <input type="number" placeholder="Matang">
     <input type="number" placeholder="Porsi">
     <input type="text" placeholder="Faktor" readonly>
+    <input type="text" placeholder="Mentah/Porsi" readonly>
     <input type="text" placeholder="Total" readonly>
     <button class="hapus-btn">X</button>
   `;
 
   const inputs = row.querySelectorAll("input");
 
-  // 🔥 isi faktor otomatis
+  // 🔍 autocomplete + faktor
   inputs[0].oninput = () => isiFaktor(row);
 
   inputs[1].oninput = () => hitungRow(row);
@@ -220,7 +222,7 @@ function tambahBahan() {
 }
 
 // ===============================
-// 🔍 CARI FAKTOR
+// 🔍 AMBIL FAKTOR
 // ===============================
 function isiFaktor(row) {
   const inputs = row.querySelectorAll("input");
@@ -249,7 +251,8 @@ function hitungRow(row) {
   let mentahPerPorsi = matang / faktor;
   let totalKg = (mentahPerPorsi * porsi) / 1000;
 
-  inputs[4].value = totalKg.toFixed(2);
+  inputs[4].value = mentahPerPorsi.toFixed(2); // 🔥 baru
+  inputs[5].value = totalKg.toFixed(2);
 
   hitungTotalSemua();
 }
@@ -262,7 +265,7 @@ function hitungTotalSemua() {
   let total = 0;
 
   rows.forEach(row => {
-    const val = parseFloat(row.children[4].value) || 0;
+    const val = parseFloat(row.children[5].value) || 0;
     total += val;
   });
 
@@ -281,7 +284,7 @@ function generateLaporan() {
     const inputs = row.querySelectorAll("input");
 
     let nama = inputs[0].value;
-    let total = inputs[4].value;
+    let total = inputs[5].value;
 
     if (nama) {
       hasil += `${i + 1}. ${nama} - ${total} Kg\n`;
