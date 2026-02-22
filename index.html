@@ -285,17 +285,16 @@
     hitungRow(row);
   }
   
-  function pembulatanKhusus(angka) {
-  // Bulatkan dulu ke 2 desimal supaya bersih dari error float
-  angka = parseFloat(angka.toFixed(2));
+function pembulatanKhusus(angka) {
+  if (!angka) return 0;
 
-  let desimal = angka - Math.floor(angka);
+  let rounded = Math.round(angka * 100) / 100;
 
-  if (desimal >= 0.99) {
-    return Math.ceil(angka);
+  if (rounded % 1 >= 0.99) {
+    return Math.ceil(rounded);
   }
 
-  return angka;
+  return rounded;
 }
   
   // ===============================
@@ -316,8 +315,8 @@
     mentahPerPorsi = pembulatanKhusus(mentahPerPorsi);
     totalKg = pembulatanKhusus(totalKg);
   
-    inputs[4].value = mentahPerPorsi.toFixed(2);
-    inputs[5].value = totalKg.toFixed(2);
+    inputs[4].value = mentahPerPorsi;
+    inputs[5].value = totalKg;
   
     hitungTotalSemua();
   }
