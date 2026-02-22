@@ -279,9 +279,10 @@ function hitungRow(row) {
 
   let matang = parseFloat(inputs[0].value) || 0;
   let porsi = parseFloat(inputs[1].value) || 0;
-  let faktor = parseFloat(inputs[2].value) || 1;
+  let faktor = parseFloat(inputs[2].value) || 0;
 
-  let mentahPerPorsi = matang / faktor;
+  // 🔥 RUMUS YANG BENAR
+  let mentahPerPorsi = matang * faktor;
   let totalKg = (mentahPerPorsi * porsi) / 1000;
 
   inputs[3].value = mentahPerPorsi.toFixed(2);
