@@ -288,13 +288,13 @@
 function pembulatanKhusus(angka) {
   if (isNaN(angka)) return 0;
 
-  let rounded = Math.round(angka * 100) / 100;
+  let desimal = angka - Math.floor(angka);
 
-  if (rounded - Math.floor(rounded) >= 0.99) {
-    return Math.ceil(rounded);
+  if (desimal >= 0.99) {
+    return Math.ceil(angka);
   }
 
-  return rounded;
+  return parseFloat(angka.toFixed(2));
 }
   
   // ===============================
