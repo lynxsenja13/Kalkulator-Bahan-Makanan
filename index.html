@@ -78,7 +78,20 @@
 
     .btn-green { background: #22c55e !important; }
 
-.table-header, .bahan-row {
+/* HEADER */
+.table-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 80px;
+  background: #3b82f6;
+  color: white;
+  border-radius: 20px;
+  padding: 12px 0;
+  margin-top: 15px;
+  font-weight: 600;
+}
+
+/* ROW */
+.bahan-row {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 80px;
   background: white;
@@ -88,10 +101,12 @@
 }
 
 .bahan-row input {
+  width: 100%;
   border: none;
   border-right: 1px solid #eee;
-  height: 45px;
+  height: 48px;
   text-align: center;
+  font-size: 14px;
 }
 
 .bahan-row input:last-of-type {
@@ -100,7 +115,7 @@
 
 .bahan-row button {
   border: none;
-  height: 45px;
+  height: 48px;
 }
 
 .bahan-row input:focus {
