@@ -212,17 +212,17 @@
       const datalist = document.getElementById("bahanList");
   
       data.forEach(item => {
-    let nama = item["Nama Bahan"]?.toLowerCase().trim();
-    let faktor = parseFloat(item["Faktor Konversi"]);
-  
-    if (nama && faktor) {
-      database[nama] = faktor;
-  
-      const option = document.createElement("option");
-      option.value = nama;
-      document.getElementById("bahanList").appendChild(option);
-    }
-  });
+  let nama = item["Nama Bahan"]?.toLowerCase().trim();
+  let faktor = parseFloat(item["Faktor Konversi"]);
+
+  if (nama && !isNaN(faktor)) {
+    database[nama] = faktor;
+
+    const option = document.createElement("option");
+    option.value = nama;
+    datalist.appendChild(option);
+  }
+});
   
     } catch (error) {
       console.error("Gagal load database:", error);
