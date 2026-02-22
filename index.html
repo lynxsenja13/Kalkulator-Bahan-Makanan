@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator Bahan Makanan</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    :root {
+      --bg: #f1f5f9;
+      --card: #0f172a;
+      --text: #0f172a;
+      --accent: #3b82f6;
+    }
+
+    body.dark {
+      --bg: #020617;
+      --card: #f8fafc;
+      --text: #ffffff;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      transition: 0.3s;
+    }
+
+    .container {
+      max-width: 750px;
+      margin: auto;
+      padding: 20px;
+      position: relative;
+    }
+
+    .logo { width: 90px; margin-bottom: 10px; }
+
+    h1 { text-align: center; color: var(--text); }
+
+    .ahli {
+      text-align: center;
+      font-weight: 700;
+      font-family: 'Quicksand', sans-serif;
+      color: var(--text);
+    }
+
+    .toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #64748b;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .card {
+      background: var(--card);
+      color: var(--text);
+      border-radius: 20px;
+      padding: 25px;
+      margin-top: 20px;
+      overflow: hidden; /* 🔥 penting */
+    }
+
+    button {
+      padding: 10px;
+      border-radius: 12px;
+      border: none;
+      background: var(--accent);
+      color: white;
+      cursor: pointer;
+    }
+
+    .btn-green { background: #22c55e !important; }
+
+    .table-header, .bahan-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 60px;
+      text-align: center;
+      align-items: center;
+      margin-top: 10px;
+      width: 100%;
+    }
+
+    .bahan-row {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .table-header {
+      background: #3b82f6;
+      color: white;
+      padding: 10px;
+      border-radius: 12px;
+      font-weight: bold;
+    }
+
+    .bahan-row input {
+      height: 40px;
+      border: 1px solid #ccc;
+      text-align: center;
+      min-width: 0; /* 🔥 FIX GRID OVERFLOW */
+    }
+
+    .table-header div,
+    .bahan-row input,
+    .bahan-row button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hapus-btn {
+      background: #ef4444 !important;
+    }
+
+    textarea {
+      width: 100%;
+      margin-top: 15px;
+      height: 120px;
+    }
+
+    .total {
+      margin-top: 10px;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <datalist id="bahanList"></datalist>
+
+    <div class="toggle" onclick="toggleMode()">🌙 Mode</div>
+
+  <h1>SPPG Cicadas 01</h1>
+  <div class="ahli">Ahli Gizi : Aliyah Khairunnisa Syafitri</div>
+
+  <div class="card">
+
+    <button onclick="tambahBahan()">+ Tambah Bahan</button>
+
+    <div class="table-header">
+    <div>Nama</div>
+    <div>Matang (gr)</div>
+    <div>Porsi</div>
+    <div>Faktor</div>
+    <div>Mentah/Porsi</div>
+    <div>Total (Kg)</div>
+    <div>Action</div>
+    </div>
+
+    <div id="listBahan"></div>
+
+    <div class="total" id="totalSemua">Total Semua: 0 Kg</div>
+
+    <button class="btn-green" onclick="generateLaporan()">Generate Laporan</button>
+
+    <textarea placeholder="Hasil laporan akan muncul di sini..."></textarea>
+
+  </div>
+
+</div>
+
+<script>
+
+// ===============================
+// 🔥 DATABASE
+// ===============================
+let database = {};
+
+async function loadDatabase() {
+  const url = "https://opensheet.elk.sh/1CxNkmz5DEGRzGSi8sTPOKS-qP3uR9qsYynkZ2C-Jxxk/Sheet1";
+
+  const res = await fetch(url);
+  const data = await res.json();
+
+  const datalist = document.getElementById("bahanList");
+
+  data.forEach(item => {
+    let nama = item["Nama Bahan"]?.toLowerCase().trim();
+    let faktor = parseFloat(item["Faktor Konversi"]);
+
+    if (nama && faktor) {
+      database[nama] = faktor;
+
+      // 🔥 isi dropdown
+      const option = document.createElement("option");
+      option.value = nama;
+      option.textContent = nama;
+      datalist.appendChild(option);
+    }
+  });
+}
+
+loadDatabase();
+
+// ===============================
+// ➕ TAMBAH ROW
+// ===============================
+function tambahBahan() {
+  const container = document.getElementById("listBahan");
+
+  const row = document.createElement("div");
+  row.className = "bahan-row";
+
+  row.innerHTML = `
+    <input list="bahanList" placeholder="Nama">
+    <input type="number" placeholder="Matang">
+    <input type="number" placeholder="Porsi">
+    <input type="text" placeholder="Faktor" readonly>
+    <input type="text" placeholder="Mentah/Porsi" readonly>
+    <input type="text" placeholder="Total" readonly>
+    <button class="hapus-btn">X</button>
+  `;
+
+  const inputs = row.querySelectorAll("input");
+
+  // 🔍 autocomplete + faktor
+  inputs[0].oninput = () => isiFaktor(row);
+  inputs[0].onchange = () => isiFaktor(row); // 🔥 penting
+
+  inputs[1].oninput = () => hitungRow(row);
+  inputs[2].oninput = () => hitungRow(row);
+
+  row.querySelector(".hapus-btn").onclick = () => {
+    row.remove();
+    hitungTotalSemua();
+  };
+
+  container.appendChild(row);
+}
+
+// ===============================
+// 🔍 AMBIL FAKTOR
+// ===============================
+function isiFaktor(row) {
+  const inputs = row.querySelectorAll("input");
+
+  let nama = inputs[0].value.toLowerCase().trim();
+
+// 🔥 cari yang mirip
+let key = Object.keys(database).find(k => k.includes(nama));
+
+if (key) {
+  inputs[3].value = database[key];
+} else {
+  inputs[3].value = "";
+}
+
+  hitungRow(row);
+}
+
+// ===============================
+// 🧮 HITUNG
+// ===============================
+function hitungRow(row) {
+  const inputs = row.querySelectorAll("input");
+
+  let matang = parseFloat(inputs[1].value) || 0;
+  let porsi = parseFloat(inputs[2].value) || 0;
+  let faktor = parseFloat(inputs[3].value) || 1;
+
+  let mentahPerPorsi = matang / faktor;
+  let totalKg = (mentahPerPorsi * porsi) / 1000;
+
+  inputs[4].value = mentahPerPorsi.toFixed(2); // 🔥 baru
+  inputs[5].value = totalKg.toFixed(2);
+
+  hitungTotalSemua();
+}
+
+// ===============================
+// 📊 TOTAL SEMUA
+// ===============================
+function hitungTotalSemua() {
+  const rows = document.querySelectorAll(".bahan-row");
+  let total = 0;
+
+  rows.forEach(row => {
+    const val = parseFloat(row.children[5].value) || 0;
+    total += val;
+  });
+
+  document.getElementById("totalSemua").innerText =
+    "Total Semua: " + total.toFixed(2) + " Kg";
+}
+
+// ===============================
+// 🧾 LAPORAN
+// ===============================
+function generateLaporan() {
+  const rows = document.querySelectorAll(".bahan-row");
+  let hasil = "";
+
+  rows.forEach((row, i) => {
+    const inputs = row.querySelectorAll("input");
+
+    let nama = inputs[0].value;
+    let total = inputs[5].value;
+
+    if (nama) {
+      hasil += `${i + 1}. ${nama} - ${total} Kg\n`;
+    }
+  });
+
+  document.querySelector("textarea").value = hasil;
+}
+
+</script>
+
+</body>
+</html>
