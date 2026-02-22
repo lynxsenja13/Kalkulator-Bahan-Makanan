@@ -286,11 +286,11 @@
   }
   
 function pembulatanKhusus(angka) {
-  if (!angka) return 0;
+  if (isNaN(angka)) return 0;
 
   let rounded = Math.round(angka * 100) / 100;
 
-  if (rounded % 1 >= 0.99) {
+  if (rounded - Math.floor(rounded) >= 0.99) {
     return Math.ceil(rounded);
   }
 
@@ -301,25 +301,27 @@ function pembulatanKhusus(angka) {
   // 🧮 HITUNG
   // ===============================
   function hitungRow(row) {
-    const inputs = row.querySelectorAll("input");
-  
-    let matang = parseFloat(inputs[1].value) || 0;
-    let porsi = parseFloat(inputs[2].value) || 0;
-    let faktor = parseFloat(inputs[3].value) || 0;
-  
-    let mentahPerPorsi = pembulatanKhusus(matang * faktor);
-    let totalKg = pembulatanKhusus(
-    (mentahPerPorsi * porsi) / 1000
-    );
-  
-    mentahPerPorsi = pembulatanKhusus(mentahPerPorsi);
-    totalKg = pembulatanKhusus(totalKg);
-  
-    inputs[4].value = mentahPerPorsi;
-    inputs[5].value = totalKg;
-  
+  const inputs = row.querySelectorAll("input");
+
+  let matang = parseFloat(inputs[1].value);
+  let porsi = parseFloat(inputs[2].value);
+  let faktor = parseFloat(inputs[3].value);
+
+  if (isNaN(matang) || isNaN(porsi) || isNaN(faktor)) {
+    inputs[4].value = "";
+    inputs[5].value = "";
     hitungTotalSemua();
+    return;
   }
+
+  let mentahPerPorsi = pembulatanKhusus(matang * faktor);
+  let totalKg = pembulatanKhusus((mentahPerPorsi * porsi) / 1000);
+
+  inputs[4].value = mentahPerPorsi.toFixed(2);
+  inputs[5].value = totalKg.toFixed(2);
+
+  hitungTotalSemua();
+}
   
   // ===============================
   // 📊 TOTAL SEMUA
