@@ -172,34 +172,42 @@
 </div>
 
 <script>
-
+function toggleMode() {
+  document.body.classList.toggle("dark");
+}
+  
 // ===============================
 // 🔥 DATABASE
 // ===============================
 let database = {};
 
 async function loadDatabase() {
-  const url = "https://opensheet.elk.sh/1CxNkmz5DEGRzGSi8sTPOKS-qP3uR9qsYynkZ2C-Jxxk/Sheet1";
+  try {
+    const url = "https://opensheet.elk.sh/1CxNkmz5DEGRzGSi8sTPOKS-qP3uR9qsYynkZ2C-Jxxk/Sheet1";
 
-  const res = await fetch(url);
-  const data = await res.json();
+    const res = await fetch(url);
+    const data = await res.json();
 
-  const datalist = document.getElementById("bahanList");
+    const datalist = document.getElementById("bahanList");
 
-  data.forEach(item => {
-    let nama = item["Nama Bahan"]?.toLowerCase().trim();
-    let faktor = parseFloat(item["Faktor Konversi"]);
+    data.forEach(item => {
+      let nama = item["Nama Bahan"]?.toLowerCase().trim();
+      let faktor = parseFloat(item["Faktor Konversi"]);
 
-    if (nama && faktor) {
-      database[nama] = faktor;
+      if (nama && faktor) {
+        database[nama] = faktor;
 
-      // 🔥 isi dropdown
-      const option = document.createElement("option");
-      option.value = nama;
-      option.textContent = nama;
-      datalist.appendChild(option);
-    }
-  });
+        const option = document.createElement("option");
+        option.value = nama;
+        option.textContent = nama;
+        datalist.appendChild(option);
+      }
+    });
+
+  } catch (error) {
+    console.error("Gagal load database:", error);
+    alert("Database gagal dimuat. Cek koneksi / spreadsheet.");
+  }
 }
 
 loadDatabase();
@@ -287,7 +295,8 @@ function hitungTotalSemua() {
   let total = 0;
 
   rows.forEach(row => {
-    const val = parseFloat(row.children[5].value) || 0;
+    const inputs = row.querySelectorAll("input");
+    const val = parseFloat(inputs[5].value) || 0;
     total += val;
   });
 
