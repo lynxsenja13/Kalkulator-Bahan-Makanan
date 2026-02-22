@@ -5,14 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kalkulator Bahan Makanan</title>
 
-  <!-- FONT -->
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
 
   <style>
-    * {
-  box-sizing: border-box;
-  }
-    
+    * { box-sizing: border-box; }
+
     :root {
       --bg: #f1f5f9;
       --card: #0f172a;
@@ -20,7 +17,6 @@
       --accent: #3b82f6;
     }
 
-    /* DARK MODE */
     body.dark {
       --bg: #020617;
       --card: #f8fafc;
@@ -35,35 +31,20 @@
     }
 
     .container {
-      max-width: 700px;
+      max-width: 750px;
       margin: auto;
       padding: 20px;
       position: relative;
     }
 
-    .logo-wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+    .logo { width: 90px; margin-bottom: 10px; }
 
-    .logo {
-      width: 90px;
-      margin-bottom: 10px;
-    }
-
-    h1 {
-      text-align: center;
-      margin: 10px 0 5px;
-      color: var(--text);
-    }
+    h1 { text-align: center; color: var(--text); }
 
     .ahli {
       text-align: center;
       font-weight: 700;
-      font-size: 18px;
       font-family: 'Quicksand', sans-serif;
-      margin-bottom: 20px;
       color: var(--text);
     }
 
@@ -76,7 +57,6 @@
       padding: 8px 14px;
       border-radius: 20px;
       cursor: pointer;
-      font-size: 14px;
     }
 
     .card {
@@ -84,207 +64,81 @@
       color: var(--text);
       border-radius: 20px;
       padding: 25px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      margin-top: 20px;
     }
 
     button {
-      padding: 10px 15px;
+      padding: 10px;
       border-radius: 12px;
       border: none;
       background: var(--accent);
       color: white;
-      font-weight: bold;
       cursor: pointer;
-      transition: 0.3s;
-    }
-  
-    /* tombol generate tetap hijau */
-    .btn-green {
-      background: #22c55e !important;
-      color: white !important;
     }
 
-    /* HEADER TABLE */
-    .table-header {
+    .btn-green { background: #22c55e !important; }
+
+    .table-header, .bahan-row {
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr 60px;
-      background: linear-gradient(145deg, #3b82f6, #2563eb);
-      color: white;
-      padding: 12px 10px;
-      border-radius: 15px;
-      font-weight: bold;
+      grid-template-columns: 2fr 1fr 1fr 1fr 1fr 60px;
       text-align: center;
-      margin-top: 15px;
-  }
-
-    /* ROW BAHAN */
-    .bahan-row {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr 60px;
-      align-items: stretch;
+      align-items: center;
       margin-top: 10px;
-      overflow: hidden;          /* 🔥 penting */
-      border-radius: 14px;       /* 🔥 satu rounded untuk semua */
-      background: #ffffff;       /* 🔥 satu background */
-      border: 1px solid #cbd5e1; /* 🔥 satu border luar */
     }
 
-    .bahan-row:focus-within {
-      box-shadow: 0 0 0 2px rgba(59,130,246,0.25);
-    }
-
-    .bahan-row > *:last-child {
-      border-right: none;
-    }
-
-    .card {
-      overflow: hidden;
-    }
-
-    .table-header div {
-      text-align: center;
-    }
-
-    .bahan-row input[type="text"] {
-      text-align: left;
+    .table-header {
+      background: #3b82f6;
+      color: white;
+      padding: 10px;
+      border-radius: 12px;
+      font-weight: bold;
     }
 
     .bahan-row input {
-      width: 100%;
-      padding: 0 10px;
       height: 40px;
-      border: none;              /* 🔥 hapus border masing-masing */
-      border-right: 1px solid #cbd5e1; /* 🔥 garis pemisah */
-      border-radius: 0;
-      background: transparent;   /* 🔥 ikut background baris */
-    }
-
-    .bahan-row button {
-      width: 100%;
-    }
-
-    /* hilangkan double border di tengah */
-    .bahan-row input:not(:first-child) {
-      border-left: none;
+      border: 1px solid #ccc;
+      text-align: center;
     }
 
     .hapus-btn {
-      width: 100%;
-      height: 40px;
       background: #ef4444 !important;
-      color: white !important;
-      font-weight: bold;
-      border: none;
-      border-radius: 0;          /* 🔥 penting */
-      cursor: pointer;
-    }
-
-    /* efek hover biar mantap */
-    .hapus-btn:hover {
-      background: #dc2626 !important;
-    }
-
-    .total {
-      margin-top: 15px;
-      font-weight: bold;
     }
 
     textarea {
       width: 100%;
-      height: 120px;
       margin-top: 15px;
-      border-radius: 12px;
-      padding: 10px;
-      border: 1px solid #ccc;
+      height: 120px;
     }
 
-    .table-header div,
-    .bahan-row input,
-    .bahan-row button {
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .btn-green {
-      margin-top: 10px;
-    }
-    
-    .table-header div:not(:last-child),
-    .bahan-row > *:not(:last-child) {
-      border-right: 1px solid rgba(255,255,255,0.15);
-    }
-
-    .table-header div:last-child,
-    .bahan-row button {
-      border-right: none;
-    }
-
-    /* TOTAL SEMUA */
     .total {
-      color: #ffffff; /* default = light mode (cerah) */
-  }
-
-  /* DARK MODE → jadi gelap */
-    body.dark .total {
-      color: #0f172a;
-  }
-
-    /* ===============================
-   FORCE BUTTON COLORS (FINAL FIX)
-   =============================== */
-
-/* tombol tambah bahan (biru konsisten) */
-button:not(.hapus-btn):not(.btn-green) {
-  background: var(--accent) !important;
-  color: white !important;
-}
-
-/* tombol generate (hijau konsisten) */
-.btn-green {
-  background: #22c55e !important;
-  color: white !important;
-}
-
-/* tombol hapus selalu merah */
-.hapus-btn {
-  background: #ef4444 !important;
-  color: white !important;
-}
-
-.hapus-btn:hover {
-  background: #dc2626 !important;
-}
-    
+      margin-top: 10px;
+      color: white;
+    }
   </style>
 </head>
+
 <body>
 
 <div class="container">
 
   <div class="toggle" onclick="toggleMode()">🌙 Mode</div>
 
-  <div class="logo-wrapper">
-    <img src="logo.png" class="logo">
-  </div>
-
   <h1>SPPG Cicadas 01</h1>
   <div class="ahli">Ahli Gizi : Aliyah Khairunnisa Syafitri</div>
 
   <div class="card">
 
-    <button type="button" onclick="tambahBahan()">+ Tambah Bahan</button>
+    <button onclick="tambahBahan()">+ Tambah Bahan</button>
 
     <div class="table-header">
       <div>Nama</div>
-      <div>Berat (gr)</div>
+      <div>Matang (gr)</div>
       <div>Porsi</div>
+      <div>Faktor</div>
       <div>Total (Kg)</div>
       <div>Action</div>
     </div>
 
-    <!-- LIST BAHAN -->
     <div id="listBahan"></div>
 
     <div class="total" id="totalSemua">Total Semua: 0 Kg</div>
@@ -298,96 +152,145 @@ button:not(.hapus-btn):not(.btn-green) {
 </div>
 
 <script>
-  function toggleMode() {
-    document.body.classList.toggle("dark");
-  }
 
-  function tambahBahan() {
-    const container = document.getElementById("listBahan");
+// ===============================
+// 🔥 DATABASE DARI SPREADSHEET
+// ===============================
+let database = {};
 
-    if (!container) {
-      alert("Container tidak ditemukan!");
-      return;
+async function loadDatabase() {
+  const url = "https://opensheet.elk.sh/1CxNkmz5DEGRzGSi8sTPOKS-qP3uR9qsYynkZ2C-Jxxk/Sheet1";
+
+  const res = await fetch(url);
+  const data = await res.json();
+
+  data.forEach(item => {
+    let nama = item["Nama Bahan"]?.toLowerCase().trim();
+    let faktor = parseFloat(item["Faktor Konversi"]);
+
+    if (nama && faktor) {
+      database[nama] = faktor;
     }
+  });
 
-    const row = document.createElement("div");
-    row.className = "bahan-row";
+  console.log("Database:", database);
+}
 
-    row.innerHTML = `
-      <input type="text" placeholder="Nama">
-      <input type="number" placeholder="Gram">
-      <input type="number" placeholder="Porsi">
-      <input type="text" placeholder="Total" readonly>
-      <button type="button" class="hapus-btn">X</button>
-    `;
+loadDatabase();
 
-    // tombol hapus
-    row.querySelector(".hapus-btn").onclick = function () {
-      row.remove();
-      hitungTotalSemua();
-    };
+// ===============================
+// 🌙 DARK MODE
+// ===============================
+function toggleMode() {
+  document.body.classList.toggle("dark");
+}
 
-    // event hitung otomatis
-    const inputs = row.querySelectorAll("input");
-    inputs[1].oninput = () => hitungRow(row);
-    inputs[2].oninput = () => hitungRow(row);
+// ===============================
+// ➕ TAMBAH BAHAN
+// ===============================
+function tambahBahan() {
+  const container = document.getElementById("listBahan");
 
-    container.appendChild(row);
-  }
+  const row = document.createElement("div");
+  row.className = "bahan-row";
 
-  function hitungRow(row) {
+  row.innerHTML = `
+    <input type="text" placeholder="Nama">
+    <input type="number" placeholder="Matang">
+    <input type="number" placeholder="Porsi">
+    <input type="text" placeholder="Faktor" readonly>
+    <input type="text" placeholder="Total" readonly>
+    <button class="hapus-btn">X</button>
+  `;
+
   const inputs = row.querySelectorAll("input");
 
-  let nama = inputs[0].value.toLowerCase();
-  let gram = parseFloat(inputs[1].value) || 0;
-  let porsi = parseFloat(inputs[2].value) || 0;
+  // 🔥 isi faktor otomatis
+  inputs[0].oninput = () => isiFaktor(row);
 
-  let total;
+  inputs[1].oninput = () => hitungRow(row);
+  inputs[2].oninput = () => hitungRow(row);
 
-  if (nama.includes("beras")) {
-    total = (gram * porsi) / 1000 / 3;
+  row.querySelector(".hapus-btn").onclick = () => {
+    row.remove();
+    hitungTotalSemua();
+  };
+
+  container.appendChild(row);
+}
+
+// ===============================
+// 🔍 CARI FAKTOR
+// ===============================
+function isiFaktor(row) {
+  const inputs = row.querySelectorAll("input");
+
+  let nama = inputs[0].value.toLowerCase().trim();
+
+  if (database[nama]) {
+    inputs[3].value = database[nama];
   } else {
-    total = (gram * porsi) / 1000;
+    inputs[3].value = "";
   }
 
-  inputs[3].value = total.toFixed(2);
+  hitungRow(row);
+}
+
+// ===============================
+// 🧮 HITUNG
+// ===============================
+function hitungRow(row) {
+  const inputs = row.querySelectorAll("input");
+
+  let matang = parseFloat(inputs[1].value) || 0;
+  let porsi = parseFloat(inputs[2].value) || 0;
+  let faktor = parseFloat(inputs[3].value) || 1;
+
+  let mentahPerPorsi = matang / faktor;
+  let totalKg = (mentahPerPorsi * porsi) / 1000;
+
+  inputs[4].value = totalKg.toFixed(2);
 
   hitungTotalSemua();
 }
 
-  function hitungTotalSemua() {
-    const rows = document.querySelectorAll(".bahan-row");
-    let total = 0;
+// ===============================
+// 📊 TOTAL SEMUA
+// ===============================
+function hitungTotalSemua() {
+  const rows = document.querySelectorAll(".bahan-row");
+  let total = 0;
 
-    rows.forEach(row => {
-      const val = parseFloat(row.children[3].value) || 0;
-      total += val;
-    });
+  rows.forEach(row => {
+    const val = parseFloat(row.children[4].value) || 0;
+    total += val;
+  });
 
-    document.getElementById("totalSemua").innerText =
-      "Total Semua: " + total.toFixed(2) + " Kg";
-  }
+  document.getElementById("totalSemua").innerText =
+    "Total Semua: " + total.toFixed(2) + " Kg";
+}
 
-  function generateLaporan() {
+// ===============================
+// 🧾 LAPORAN
+// ===============================
+function generateLaporan() {
   const rows = document.querySelectorAll(".bahan-row");
   let hasil = "";
 
-  rows.forEach((row, index) => {
+  rows.forEach((row, i) => {
     const inputs = row.querySelectorAll("input");
 
     let nama = inputs[0].value;
-    let gram = inputs[1].value;
-    let porsi = inputs[2].value;
-    let total = inputs[3].value;
+    let total = inputs[4].value;
 
     if (nama) {
-      hasil += `${index + 1}. ${nama} - ${total} Kg\n`;
+      hasil += `${i + 1}. ${nama} - ${total} Kg\n`;
     }
   });
 
   document.querySelector("textarea").value = hasil;
-  }
-  
+}
+
 </script>
 
 </body>
